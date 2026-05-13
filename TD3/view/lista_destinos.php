@@ -32,7 +32,9 @@ $destinos = $dao->listar();
                 <td><?= $d['nome_local'] ?></td>
                 <td>R$ <?= number_format($d['valor_passagem'], 2, ',', '.') ?></td>
                 <td>
-                    <a href="../controller/DestinoController.php?acao=excluir&id=<?= $d['id_destino'] ?>" class="btn btn-danger btn-sm">Excluir</a>
+                    <a href="form_destino.php?id=<?= $d['id_destino'] ?>" class="btn btn-primary btn-sm">Editar</a>
+                    
+                    <a href="../controller/DestinoController.php?acao=excluir&id=<?= $d['id_destino'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Deseja excluir este destino?')">Excluir</a>
                 </td>
             </tr>
             <?php endforeach; else: ?>

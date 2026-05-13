@@ -15,7 +15,7 @@
                 <div class="row text-center">
                     <div class="col-md-4 mb-3">
                         <h3>Clientes</h3>
-                        <a href="/view/lista_clientes.php" class="btn btn-outline-primary w-100 mb-2">Novo Cliente</a>
+                        <a href="form_cliente.php" class="btn btn-outline-primary w-100 mb-2">Novo Cliente</a>
                         <a href="lista_clientes.php" class="btn btn-primary w-100">Ver Lista</a>
                     </div>
                     <div class="col-md-4 mb-3">

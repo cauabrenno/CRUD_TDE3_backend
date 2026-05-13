@@ -1,8 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 require_once '../model/Destino.php';
 require_once '../dao/DestinoDAO.php';
 
@@ -20,11 +16,16 @@ class DestinoController {
             case 'salvar':
                 $destino = new Destino($post['nome_local'], $post['valor_passagem']);
                 
-                if ($this->dao->salvar($destino)) {
-                    header("Location: ../view/lista_destinos.php");
-                    exit;
+                if (isset($post['id_destino']) && !empty($post['id_destino'])) {
+                    if ($this->dao->atualizar($destino, $post['id_destino'])) {
+                        header("Location: ../view/lista_destinos.php");
+                        exit;
+                    }
                 } else {
-                    echo "Erro ao salvar o destino no banco de dados.";
+                    if ($this->dao->salvar($destino)) {
+                        header("Location: ../view/lista_destinos.php");
+                        exit;
+                    }
                 }
                 break;
 

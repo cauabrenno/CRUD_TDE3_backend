@@ -1,33 +1,34 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 require_once '../model/Cliente.php';
 require_once '../dao/ClienteDAO.php';
 
-class ClienteController
-{
+class ClienteController {
     private $dao;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->dao = new ClienteDAO();
     }
 
-    public function processarAcao($post, $get)
-    {
+    public function processarAcao($post, $get) {
         $acao = $post['acao'] ?? $get['acao'] ?? null;
 
         switch ($acao) {
             case 'salvar':
                 $cliente = new Cliente($post['nome'], $post['cpf'], $post['email']);
-
-                if ($this->dao->salvar($cliente)) {
-                    header("Location: ../view/lista_clientes.php");
-                    exit;
-                } else {
-                    echo "Erro ao salvar no banco de dados.";
+                
+                // Se o id_cliente estiver preenchido no formulário, faz o UPDATE
+                if (isset($post['id_cliente']) && !empty($post['id_cliente'])) {
+                    if ($this->dao->atualizar($cliente, $post['id_cliente'])) {
+                        header("Location: ../view/lista_clientes.php");
+                        exit;
+                    }
+                } 
+                // Se não houver ID, faz um novo INSERT (Cadastro)
+                else {
+                    if ($this->dao->salvar($cliente)) {
+                        header("Location: ../view/lista_clientes.php");
+                        exit;
+                    }
                 }
                 break;
 
@@ -39,27 +40,11 @@ class ClienteController
                 header("Location: ../view/lista_clientes.php");
                 exit;
                 break;
-
-            default:
-                echo "Ação não identificada.";
-                break;
-
-            case 'editar':
-                $id = $post['id_cliente'];
-                $cliente = new Cliente($post['nome'], $post['cpf'], $post['email']);
-
-                if ($this->dao->atualizar($cliente, $id)) {
-                    header("Location: ../view/lista_clientes.php");
-                    exit;
-                } else {
-                    echo "Erro ao atualizar no banco de dados.";
-                }
-                break;
         }
     }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['acao'])) {
-    $c = new ClienteController();
-    $c->processarAcao($_POST, $_GET);
+    $controller = new ClienteController();
+    $controller->processarAcao($_POST, $_GET);
 }

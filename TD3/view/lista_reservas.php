@@ -34,6 +34,8 @@ $reservas = $dao->listar();
                 <td><?= $r['destino'] ?></td>
                 <td><?= date('d/m/Y', strtotime($r['data_reserva'])) ?></td>
                 <td>
+                    <a href="form_reserva.php?id=<?= $r['id_reserva'] ?>" class="btn btn-primary btn-sm">Editar</a>
+                    
                     <a href="../controller/ReservaController.php?acao=excluir&id=<?= $r['id_reserva'] ?>" 
                        class="btn btn-outline-danger btn-sm" 
                        onclick="return confirm('Excluir esta reserva?')">Cancelar</a>

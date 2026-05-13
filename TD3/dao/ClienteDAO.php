@@ -18,6 +18,33 @@ class ClienteDAO {
         }
     }
 
+    public function atualizar(Cliente $cliente, $id_cliente) {
+        try {
+            $sql = "UPDATE Cliente SET nome = ?, cpf = ?, email = ? WHERE id_cliente = ?";
+            $p_sql = Conexao::getConexao()->prepare($sql);
+            $p_sql->bindValue(1, $cliente->getNome());
+            $p_sql->bindValue(2, $cliente->getCpf());
+            $p_sql->bindValue(3, $cliente->getEmail());
+            $p_sql->bindValue(4, $id_cliente);
+            
+            return $p_sql->execute();
+        } catch (Exception $e) {
+            echo "Erro ao atualizar cliente: " . $e->getMessage();
+        }
+    }
+
+    public function buscarPorId($id_cliente) {
+        try {
+            $sql = "SELECT * FROM Cliente WHERE id_cliente = ?";
+            $p_sql = Conexao::getConexao()->prepare($sql);
+            $p_sql->bindValue(1, $id_cliente);
+            $p_sql->execute();
+            return $p_sql->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo "Erro ao buscar cliente: " . $e->getMessage();
+        }
+    }
+
     public function listar() {
         try {
             $sql = "SELECT * FROM Cliente ORDER BY nome";
@@ -28,41 +55,14 @@ class ClienteDAO {
         }
     }
 
-    public function eliminar($id) {
+    public function eliminar($id_cliente) {
         try {
             $sql = "DELETE FROM Cliente WHERE id_cliente = ?";
             $p_sql = Conexao::getConexao()->prepare($sql);
-            $p_sql->bindValue(1, $id);
+            $p_sql->bindValue(1, $id_cliente);
             return $p_sql->execute();
         } catch (Exception $e) {
             echo "Erro ao eliminar cliente: " . $e->getMessage();
         }
     }
-
-    public function atualizar(Cliente $cliente, $id) {
-    try {
-        $sql = "UPDATE Cliente SET nome = ?, cpf = ?, email = ? WHERE id_cliente = ?";
-        $p_sql = Conexao::getConexao()->prepare($sql);
-        $p_sql->bindValue(1, $cliente->getNome());
-        $p_sql->bindValue(2, $cliente->getCpf());
-        $p_sql->bindValue(3, $cliente->getEmail());
-        $p_sql->bindValue(4, $id);
-        
-        return $p_sql->execute();
-    } catch (Exception $e) {
-        echo "Erro ao atualizar cliente: " . $e->getMessage();
-    }
-}
-
-public function buscarPorId($id) {
-    try {
-        $sql = "SELECT * FROM Cliente WHERE id_cliente = ?";
-        $p_sql = Conexao::getConexao()->prepare($sql);
-        $p_sql->bindValue(1, $id);
-        $p_sql->execute();
-        return $p_sql->fetch(PDO::FETCH_ASSOC);
-    } catch (Exception $e) {
-        echo "Erro ao buscar cliente: " . $e->getMessage();
-    }
-}
 }

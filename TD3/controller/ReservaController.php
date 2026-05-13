@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 require_once '../model/Reserva.php';
 require_once '../dao/ReservaDAO.php';
 
@@ -19,11 +16,16 @@ class ReservaController {
             case 'salvar':
                 $reserva = new Reserva($post['id_cliente'], $post['id_destino'], $post['data_reserva']);
                 
-                if ($this->dao->salvar($reserva)) {
-                    header("Location: ../view/lista_reservas.php");
-                    exit;
+                if (isset($post['id_reserva']) && !empty($post['id_reserva'])) {
+                    if ($this->dao->atualizar($reserva, $post['id_reserva'])) {
+                        header("Location: ../view/lista_reservas.php");
+                        exit;
+                    }
                 } else {
-                    echo "Erro ao salvar reserva no banco.";
+                    if ($this->dao->salvar($reserva)) {
+                        header("Location: ../view/lista_reservas.php");
+                        exit;
+                    }
                 }
                 break;
 
@@ -38,7 +40,6 @@ class ReservaController {
         }
     }
 }
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['acao'])) {
     $controller = new ReservaController();
